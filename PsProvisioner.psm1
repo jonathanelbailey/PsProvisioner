@@ -1,6 +1,5 @@
 ﻿function Initialize-ProvisionerTypes{
     BEGIN{
-        $isProgramTypeInitialized = [PsProvisioner.InstalledProgramInformation],[PsProvisioner.DependencyInformation] | Out-Null
         $Source = @"
 using System;
 
@@ -29,13 +28,17 @@ namespace PsProvisioner
                     DateTime date = DateTime.Parse(dateInput);
                     m_InstalledDate = date;
                 }
-                else 
+                if (dateInput.Length == 8) 
                 {
                     Int32 year = Int32.Parse(dateInput.Substring(0, 4));
                     Int32 month = Int32.Parse(dateInput.Substring(4, 2));
                     Int32 day = Int32.Parse(dateInput.Substring(6, 2));
                     DateTime date = new DateTime(year, month, day);
                     m_InstalledDate = date;
+                }
+                else if (dateInput.Length < 8 )
+                {
+                    m_InstalledDate = DateTime.Now; // needs work.  This only removes error messages during instantiation.
                 }
             }
         }
@@ -52,19 +55,24 @@ namespace PsProvisioner
 "@
     }
     PROCESS{
-        if($isProgramTypeInitialized.IsClass -eq $null){
-            add-type -Language CSharp -TypeDefinition $Source
-            write-host 'PsProvisioner.InstalledProgramInformation has been initialized.'
-            Write-Host 'PsProvisioner.DependencyInformation has been initialized.'
-        }
-        else{
-            Write-Host 'PsProvisioner.InstalledProgramInformation is already loaded.'
-            Write-Host 'PsProvisioner.DependencyInformation is already loaded.'
-        }
+        add-type -Language CSharp -TypeDefinition $Source
+        write-host -ForegroundColor Yellow 'PsProvisioner.InstalledProgramInformation has been initialized.'
+        Write-Host -ForegroundColor Yellow 'PsProvisioner.DependencyInformation has been initialized.'
     }
     END{
         $checkIsInitialized = [PsProvisioner.InstalledProgramInformation],[PsProvisioner.DependencyInformation]
-        Write-Output $checkIsInitialized
+        foreach ($c in $checkIsInitialized.isclass){
+            $passfail = $true
+            if ($c.isclass -eq $true){
+                if ($passfail -eq $false){
+                    $passfail = $false
+                }
+                elseif($passfail -eq $true){
+                    $passfail = $true
+                }
+            }
+        }
+        Write-Output $passfail
     }
 }
 
@@ -156,7 +164,7 @@ Function Invoke-PsProvisioner{
                         Mandatory=$true,
                         ParameterSetName='CreateConfig' )]
             [switch]$CreateConfigurationFile,
-            [Paramter( Position=1,
+            [Parameter( Position=1,
                        Mandatory=$false,
                        ParameterSetName='CreateConfig' )]
             [string]$Path,
@@ -202,7 +210,7 @@ function New-PsProvisionFile{
 
 # Valid Input:
 
-# Name $DisplayName; <-- Must Match the Display Name of the application.  Use 'Invoke-PsProvisioner -ListAll' to search reference machine for the App.
+# Name $DisplayName; <-- Must Match the Name of the application.  Use 'Invoke-PsProvisioner -ListAll' to search reference machine for the App.
 # Source $Source; <-- Currently supports the following: 'choco','git','custom'
 # Version $DisplayVersion; <-- Must Match the Display Version of the application. Use 'Invoke-PsProvisioner -ListAll -ShowVersion' to search reference machine for the App Version.
 # Args $ArgumentList; <-- Use this for local installation of packages that are not available through Chocolatey.
@@ -226,7 +234,7 @@ function New-PsProvisionFile{
 #     Version:
 #     Args:
 #   4:
-#     Name: poshyaml
+#     Name: poweryaml
 #     source: git
 #     version:
 #     args: https://github.com/scottmuc/PowerYaml.git
@@ -242,7 +250,16 @@ Provisions:
     Source: 
     Version:
     Args:
-
+  2:
+    Name: 
+    Source: 
+    Version:
+    Args:
+  3:
+    Name: 
+    Source: 
+    Version:
+    Args:
 '@
     }
     END{
@@ -345,3 +362,5 @@ Function Install-Dependencies{
         Write-Output $Result
     }
 }
+
+Export-ModuleMember -Function Invoke-PsProvisioner
