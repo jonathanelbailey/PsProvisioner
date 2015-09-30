@@ -22,5 +22,7 @@
     END{
         $xmlPath = Join-Path (Get-Location).Path -ChildPath PsProvisioner\Provisions.xml
         Export-Clixml $xmlPath -InputObject $ProvisionObjects
+        Write-Host -ForegroundColor Green "Total number of objects to create: $value"
+        Write-Host -ForegroundColor Green "Total number of objects created: $ProvisionObjects"
     }
 }
