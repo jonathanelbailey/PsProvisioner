@@ -63,6 +63,6 @@ Provisions:
 '@
     }
     END{
-        Add-Content -Path $FilePath -Value $Source
+        Set-Content -Path $FilePath -Value $Source -Encoding UTF8
     }
 }

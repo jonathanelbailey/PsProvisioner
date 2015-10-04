@@ -270,6 +270,7 @@ Provisions:
 
 Function Export-ProvisionFile{
     BEGIN{
+        Initialize-ProvisionerTypes
         $ProvisionPath = Join-Path (Get-Location).Path -ChildPath PsProvisioner\Provisions.yml
         $ProvisionYaml = Get-Yaml -Path $ProvisionPath
         $ProvisionObjects = @()
