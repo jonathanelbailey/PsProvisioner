@@ -3,10 +3,10 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 . "$here\$sut"
 
 Describe "Export-ProvisionFile" {
-        if (((get-psdrive).Name -match 'z') -eq $false){
-            new-psdrive -Name z -PSProvider FileSystem -Root 'testdrive:' -Description testdrive -Scope global
-            set-location z:
-        }
+    if (((get-psdrive).Name -match 'z') -eq $false){
+        new-psdrive -Name z -PSProvider FileSystem -Root 'testdrive:' -Description testdrive -Scope global
+        set-location z:
+    }
     It "creates an xml file called Provisions.xml" {
         if ((Test-Path psprovisioner) -eq $true){
             Remove-Item psprovisioner -Recurse -Force
@@ -53,14 +53,16 @@ Provisions:
         Set-Content -Path $ymlpath -Value $source -Encoding UTF8
         Export-ProvisionFile
         $test = Import-Clixml $xmlpath
-        $result = $test[0].gettype().name
         $obj = New-Object  -TypeName PsProvisioner.DependencyInformation
         $obj.DisplayName = 'testapp'
         $obj.Source = 'choco'
         $obj.DisplayVersion = '1.0'
         $obj.ArgumentList = ''
         $expected = $obj.GetType()
-        $result | should be $expected
+        $test[0].DisplayName | should be $obj.DisplayName
+        $test[0].Source | should be $obj.Source
+        $test[0].DisplayVersion | should be $obj.DisplayVersion
+        $test[0].argumentlist | should be $obj.ArgumentList
     }
     set-location c:
 }
