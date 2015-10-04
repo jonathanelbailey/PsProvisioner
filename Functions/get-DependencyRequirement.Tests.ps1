@@ -4,22 +4,26 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 
 Describe "get-DependencyRequirement" {
     It "outputs a serialized object" {
-    if (((get-psdrive).Name -match 'z') -eq $false){
-        new-psdrive -Name z -PSProvider FileSystem -Root 'testdrive:' -Description testdrive -Scope global
-        set-location z:
-    }
+    Set-Location 'testdrive:'
     New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'choco'
-    Initialize-ProvisionerTypes
     $result = Get-dependencyrequirement
     $obj = New-Object PsProvisioner.DependencyInformation
     $obj.DisplayName = 'testapp'
     $obj.DisplayVersion = '1.0'
     $obj.Source = 'choco'
     $expected = $obj
-    $result | should be $expected
+    Remove-Item psprovisioner -Recurse -Force
+    $result.displayname | should be $obj.DisplayName
+    $result.displayversion | should be $obj.DisplayVersion
+    $result.source | should be $obj.Source
     }
     It "returns a value of false if an xml file doesn't exist" {
-        $result = Get-dependencyrequirement
-        $result | should be $false
+        set-location 'testdrive:'
+        if ((Test-Path psprovisioner) -eq $true){
+            Remove-Item psprovisioner -Recurse -Force
+        }
+        $result = get-dependencyrequirement
+        $result[0] | should be $false
     }
+    Set-Location c:
 }

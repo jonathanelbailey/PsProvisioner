@@ -22,6 +22,9 @@
         $DependencyArray += $NewDependency
     }
     END{
+        if ((Test-Path PsProvisioner) -eq $false){
+            New-Item -Name PsProvisioner -ItemType directory
+        }
         Export-Clixml -Path $XmlPath -InputObject $DependencyArray
     }
 }
