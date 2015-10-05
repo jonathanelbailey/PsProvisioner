@@ -12,17 +12,20 @@
                     choco { $true }
                     custom { $true }
                 }
-            }
-            switch ($d.source){
-                git { git clone $d.DeploymentInfo --depth=1 }
-                choco { choco install $d.DeploymentInfo -y }
-                custom { $ScriptBlock }
-            }
-            if ($LASTEXItCODE -eq '0' -or '3010'){
                 $result.Add($($d.displayname), $true)
             }
-            else{
-                $result.Add($($d.displayname), $false)
+            elseif($testmode -eq $false){
+                switch ($d.source){
+                    git { git clone $d.DeploymentInfo --depth=1 }
+                    choco { choco install $d.DeploymentInfo -y }
+                    custom { $ScriptBlock }
+                }
+                if ($LASTEXItCODE -eq '0' -or '3010'){
+                    $result.Add($($d.displayname), $true)
+                }
+                else{
+                    $result.Add($($d.displayname), $false)
+                }
             }
         }
     }

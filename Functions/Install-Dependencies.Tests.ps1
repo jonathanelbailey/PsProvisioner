@@ -13,14 +13,14 @@ Describe "Install-Dependencies" {
 
     it 'installs a git package'{
         Set-Location 'testdrive:'
-        New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'git'
+        New-DependencyRequirement -DisplayName 'gitapp' -DisplayVersion '1.0' -Source 'git'
         $result = Install-Dependencies -testmode
         $expected = $true
         $result | should be $expected
     }
     it 'installs a custom package'{
         Set-Location 'testdrive:'
-        New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'custom'
+        New-DependencyRequirement -DisplayName 'customapp' -DisplayVersion '1.0' -Source 'custom'
         $result = Install-Dependencies -testmode
         $expected = $true
         $result | should be $expected
