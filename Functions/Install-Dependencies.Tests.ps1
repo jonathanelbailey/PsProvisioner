@@ -4,13 +4,26 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 
 Describe "Install-Dependencies" {
     It "installs a chocolatey package" {
-        $true | Should Be $false
+        Set-Location 'testdrive:'
+        New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'choco'
+        $result = Install-Dependencies -testmode
+        $expected = $true
+        $result | should be $expected
     }
 
     it 'installs a git package'{
-    
+        Set-Location 'testdrive:'
+        New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'git'
+        $result = Install-Dependencies -testmode
+        $expected = $true
+        $result | should be $expected
     }
     it 'installs a custom package'{
-    
+        Set-Location 'testdrive:'
+        New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'custom'
+        $result = Install-Dependencies -testmode
+        $expected = $true
+        $result | should be $expected
     }
+    Set-Location c:
 }

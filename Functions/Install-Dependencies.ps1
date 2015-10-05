@@ -2,8 +2,8 @@
     Param( [switch]$TestMode )
     BEGIN{
         $Dependency =  Get-DependencyRequirement
+        $result = @{}
     }
-    $result = @{}
     PROCESS{
         foreach ($d in $Dependency){
             if ($TestMode -eq $true){
@@ -26,8 +26,7 @@
             }
         }
     }
-    END{
-        
+    END{        
         Write-Output $Result
     }
 }
