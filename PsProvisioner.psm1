@@ -1,5 +1,10 @@
-﻿Resolve-Path $PSScriptRoot\*.ps1 |
-? { -not ($_.ProviderPath.Contains(".Tests.")) } |
-% { . $_.ProviderPath }
+﻿if ($PSVersionTable.PSVersion.Major -ge 3){
+    $script:IgnoreErrorPreference = 'Ignore'
+}
+else{
+    $script:IgnoreErrorPreference = 'SilentlyContinue'
+}
+$moduleRoot = Split-Path -Path $MyInvocation.MyCommand.Path
 
-Export-ModuleMember -Function Invoke-PsProvisioner
+"$moduleRoot\Functions\*.ps1" | Resolve-Path | Where-Object { -not ($_.ProviderPath.ToLower().Contains(".tests.")) } |
+ForEach-Object { . $_.ProviderPath }
