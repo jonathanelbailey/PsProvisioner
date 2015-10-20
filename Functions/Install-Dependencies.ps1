@@ -16,7 +16,7 @@
             }
             elseif($testmode -eq $false){
                 switch ($d.source){
-                    git { git clone $d.displayname $d.argumentlist --depth=1 }
+                    git { git clone $d.argumentlist --depth=1 }
                     choco { choco install $d.displayname $d.argumentlist -y }
                     custom { $d.argumentlist }
                 }
