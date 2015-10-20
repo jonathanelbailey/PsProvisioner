@@ -16,8 +16,8 @@
             }
             elseif($testmode -eq $false){
                 switch ($d.source){
-                    git { git clone $d.argumentlist --depth=1 }
-                    choco { choco install $d.argumentlist -y }
+                    git { git clone $d.displayname $d.argumentlist --depth=1 }
+                    choco { choco install $d.displayname $d.argumentlist -y }
                     custom { $d.argumentlist }
                 }
                 if ($LASTEXItCODE -eq '0' -or '3010'){
