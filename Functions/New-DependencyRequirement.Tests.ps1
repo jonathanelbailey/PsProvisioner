@@ -5,7 +5,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 Describe "New-DependencyRequirement" {
     if (((get-psdrive).Name -match 'z') -eq $false){
         new-psdrive -Name z -PSProvider FileSystem -Root 'testdrive:' -Description testdrive -Scope global
-        set-location z:
+        Push-Location z:
     }
     It "creates an xml file." {
         if ((Test-Path psprovisioner) -eq $true){
@@ -43,5 +43,5 @@ Describe "New-DependencyRequirement" {
         $test[0].displayversion | should be $obj.DisplayVersion
         $test[0].argumentlist | should be $obj.ArgumentList
     }
-    set-location c:
+    Pop-Location
 }

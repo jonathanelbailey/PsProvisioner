@@ -29,9 +29,9 @@
 #     Name: poweryaml
 #     source: git
 #     version:
-#     args: https://github.com/scottmuc/PowerYaml.git
+#     args: https://github.com/scottmuc/PowerYaml.git --separate-git-dir="$home\documents\github\"
 #   5:
-#     name: PsProvisioner
+#     name: PoshGit
 #     Source: git
 #     Version: 0.1.0
 #     args: https://github.com/jonathanelbailey/poshgit.git
@@ -58,7 +58,7 @@ Provisions:
     version:
     args: https://github.com/scottmuc/PowerYaml.git
   5:
-    name: PsProvisioner
+    name: PoshGit
     Source: git
     Version: 0.1.0
     args: https://github.com/jonathanelbailey/poshgit.git

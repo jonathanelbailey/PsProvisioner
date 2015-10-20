@@ -5,7 +5,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 Describe "Export-ProvisionFile" {
     if (((get-psdrive).Name -match 'z') -eq $false){
         new-psdrive -Name z -PSProvider FileSystem -Root 'testdrive:' -Description testdrive -Scope global
-        set-location z:
+        Push-Location z:
     }
     It "creates an xml file called Provisions.xml" {
         if ((Test-Path psprovisioner) -eq $true){
@@ -64,5 +64,5 @@ Provisions:
         $test[0].DisplayVersion | should be $obj.DisplayVersion
         $test[0].argumentlist | should be $obj.ArgumentList
     }
-    set-location c:
+    Pop-Location
 }

@@ -4,7 +4,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 
 Describe "Install-Dependencies" {
     It "installs a chocolatey package" {
-        Set-Location 'testdrive:'
+        Push-Location 'testdrive:'
         New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'choco'
         $result = Install-Dependencies -testmode
         $expected = $true
@@ -25,5 +25,11 @@ Describe "Install-Dependencies" {
         $expected = $true
         $result | should be $expected
     }
-    Set-Location c:
+    it 'outputs a hash showing the install success'{
+
+    }
+    it 'outputs a hash showing the install failure'{
+
+    }
+    Pop-Location
 }

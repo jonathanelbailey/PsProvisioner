@@ -4,7 +4,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 
 Describe "get-DependencyRequirement" {
     It "outputs a serialized object" {
-    Set-Location 'testdrive:'
+    Push-Location 'testdrive:'
     New-DependencyRequirement -DisplayName 'testapp' -DisplayVersion '1.0' -Source 'choco'
     $result = Get-dependencyrequirement
     $obj = New-Object PsProvisioner.DependencyInformation
@@ -18,12 +18,12 @@ Describe "get-DependencyRequirement" {
     $result.source | should be $obj.Source
     }
     It "returns a value of false if an xml file doesn't exist" {
-        set-location 'testdrive:'
+        Push-Location 'testdrive:'
         if ((Test-Path psprovisioner) -eq $true){
             Remove-Item psprovisioner -Recurse -Force
         }
         $result = get-dependencyrequirement
         $result[0] | should be $false
     }
-    Set-Location c:
+    Pop-Location
 }

@@ -4,7 +4,7 @@ $sut = (Split-Path -Leaf $MyInvocation.MyCommand.Path).Replace(".Tests.", ".")
 
 Describe "New-PsProvisionFile" {
     It "creates a folder called PsProvisioner" {
-        Set-Location 'testdrive:'
+        Push-Location 'testdrive:'
         if ((Test-Path psprovisioner) -eq $true){
             Remove-Item psprovisioner -Recurse -Force
         }
@@ -15,7 +15,7 @@ Describe "New-PsProvisionFile" {
         $result | should be $expected
     }
     it 'creates a yaml file inside the folder called provisions.yml'{
-        Set-Location 'testdrive:'
+        Push-Location 'testdrive:'
         if ((Test-Path psprovisioner) -eq $true){
             Remove-Item psprovisioner -Recurse -Force
         }
@@ -25,5 +25,5 @@ Describe "New-PsProvisionFile" {
         $expected = 'Provisions.yml'
         $result | should be $expected
     }
-    Set-Location c:
+    Pop-Location
 }
