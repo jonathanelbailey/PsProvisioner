@@ -16,9 +16,9 @@
             }
             elseif($testmode -eq $false){
                 switch ($d.source){
-                    git { git clone $d.DeploymentInfo --depth=1 }
-                    choco { choco install $d.DeploymentInfo -y }
-                    custom { $ScriptBlock }
+                    git { git clone $d.argumentlist --depth=1 }
+                    choco { choco install $d.argumentlist -y }
+                    custom { $d.argumentlist }
                 }
                 if ($LASTEXItCODE -eq '0' -or '3010'){
                     $result.Add($($d.displayname), $true)
